@@ -1,0 +1,30 @@
+##
+## Coursera: Exploratory-data-analysis Peer-graded Assignment: Course Project 1 - Plot 3
+## Author: Gabriel Paredes
+## Version: 1.0
+##
+
+# Loads the required library
+library(sqldf)
+library(lubridate)
+
+# Reads ata from the dates 2007-02-01 and 2007-02-02
+hpc_df <- read.csv.sql("household_power_consumption.txt", "select * from file where Date = '1/2/2007' or Date = '2/2/2007' ", sep=";")
+
+# Construct the base plot for Sub_metering_1
+plot(dmy(hpc_df$Date) + hms(hpc_df$Time), hpc_df$Sub_metering_1, type = "l", ylab = "Energy Sub metering", xlab = "")
+
+# Adds the lines for Sub_metering_2
+lines(dmy(hpc_df$Date) + hms(hpc_df$Time), hpc_df$Sub_metering_2, col = "red")
+
+# Adds the lines for Sub_metering_3
+lines(dmy(hpc_df$Date) + hms(hpc_df$Time), hpc_df$Sub_metering_3, col = "blue")
+
+# Construct the plot legend
+legend("topright", legend = grep("^Sub", names(hpc_df), value = TRUE), col = c("black", "red", "blue"), lty = 1)
+
+# Save it to a PNG file with a width of 480 pixels and a height of 480 pixels.
+dev.copy(png, filename = "plot3.png", width = 480, height = 480, units = "px")
+
+# Close the GD
+dev.off()
